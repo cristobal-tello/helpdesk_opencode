@@ -11,7 +11,7 @@ export default defineConfig({
   outputDir: "./e2e/test-results",
 
   use: {
-    baseURL: "http://localhost:5173",
+    baseURL: "http://localhost:5174",
     trace: "on-first-retry",
   },
 
@@ -25,12 +25,12 @@ export default defineConfig({
   webServer: [
     {
       command: "bun run dev:server",
-      url: "http://localhost:3001/api/health",
+      url: "http://localhost:3002/api/health",
       reuseExistingServer: !process.env.CI,
     },
     {
       command: "bun run dev:client",
-      url: "http://localhost:5173",
+      url: "http://localhost:5174",
       reuseExistingServer: !process.env.CI,
     },
   ],
