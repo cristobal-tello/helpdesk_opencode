@@ -1,0 +1,12 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+# Playwright
+e2e/test-results/
+e2e/playwright-report/
+.last-run.json
+/blob-report/
+/playwright/.cache/

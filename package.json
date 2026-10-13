@@ -1,0 +1,23 @@
+{
+  "name": "helpdesk",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "bun --filter 'server' --filter 'client' dev",
+    "dev:server": "bun --filter 'server' dev",
+    "dev:client": "bun --filter 'client' dev",
+    "build": "bun --filter 'client' build",
+    "typecheck": "bun --filter '*' typecheck",
+    "test": "bun test",
+    "test:e2e": "bunx playwright test",
+    "test:e2e:ui": "bunx playwright test --ui",
+    "test:e2e:headed": "bunx playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "dotenv": "^18.0.5"
+  }
+}
