@@ -21,6 +21,25 @@ const api = axios.create({
   withCredentials: true,
 });
 
+function SkeletonRow() {
+  return (
+    <tr className="border-b last:border-0">
+      <td className="px-4 py-3">
+        <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
+      </td>
+      <td className="px-4 py-3">
+        <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
+      </td>
+      <td className="px-4 py-3">
+        <div className="h-5 w-20 animate-pulse rounded-full bg-muted" />
+      </td>
+      <td className="px-4 py-3 text-right">
+        <div className="h-4 w-24 animate-pulse rounded bg-muted" />
+      </td>
+    </tr>
+  );
+}
+
 export default function UsersPage() {
   const { data, isLoading, error } = useQuery<UsersResponse, Error>({
     queryKey: ["users"],
@@ -30,8 +49,26 @@ export default function UsersPage() {
   if (isLoading) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-center py-12">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+        <div className="mb-6 flex items-center justify-between">
+          <div className="h-6 w-24 animate-pulse rounded bg-muted" />
+          <div className="h-4 w-20 animate-pulse rounded bg-muted" />
+        </div>
+        <div className="overflow-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b text-left text-xs font-medium text-muted-foreground">
+                <th className="h-12 px-4">Name</th>
+                <th className="h-12 px-4">Email</th>
+                <th className="h-12 px-4">Role</th>
+                <th className="h-12 px-4 text-right">Joined</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(5)].map((_, i) => (
+                <SkeletonRow key={i} />
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     );
