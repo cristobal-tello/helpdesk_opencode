@@ -4,6 +4,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./auth";
+import usersRouter from "./routes/users";
 
 if (
   !process.env.BETTER_AUTH_SECRET ||
@@ -40,6 +41,8 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.all("/api/auth/*splat", toNodeHandler(auth));
+
+app.use("/api/users", usersRouter);
 
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok" });
