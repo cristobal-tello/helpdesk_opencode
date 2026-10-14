@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { Shield, User as UserIcon } from "lucide-react";
 
 interface User {
@@ -9,26 +10,24 @@ interface User {
   createdAt: string;
 }
 
+interface UsersResponse {
+  users: User[];
+}
+
 const API_BASE = import.meta.env.VITE_API_URL || "";
 
+const api = axios.create({
+  baseURL: API_BASE,
+  withCredentials: true,
+});
+
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, isLoading, error } = useQuery<UsersResponse, Error>({
+    queryKey: ["users"],
+    queryFn: () => api.get("/api/users").then((res) => res.data),
+  });
 
-  useEffect(() => {
-    fetch(`${API_BASE}/api/users`, { credentials: "include" })
-      .then(async (res) => {
-        if (!res.ok) throw new Error("Failed to load users");
-        const data = await res.json();
-        return data.users;
-      })
-      .then(setUsers)
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="flex items-center justify-center py-12">
@@ -42,11 +41,13 @@ export default function UsersPage() {
     return (
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="rounded-lg border border-destructive bg-destructive/10 p-4 text-destructive">
-          <p className="text-sm">{error}</p>
+          <p className="text-sm">{error.message}</p>
         </div>
       </div>
     );
   }
+
+  const users = data?.users ?? [];
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
